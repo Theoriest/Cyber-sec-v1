@@ -1,0 +1,6 @@
+Data/CSV[[:space:]]Files/cleaned_cve_data.csv filter=lfs diff=lfs merge=lfs -text
+Data/CSV[[:space:]]Files/cve_data.csv filter=lfs diff=lfs merge=lfs -text
+Data/CSV[[:space:]]Files/updated_cve_data_wot.csv filter=lfs diff=lfs merge=lfs -text
+git filter=lfs diff=lfs merge=lfs -text
+lfs filter=lfs diff=lfs merge=lfs -text
+track filter=lfs diff=lfs merge=lfs -text

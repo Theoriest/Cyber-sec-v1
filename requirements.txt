@@ -1,0 +1,7 @@
+sentencepiece
+pandas
+scikit-learn
+torch
+tensorflow
+flax
+transformers

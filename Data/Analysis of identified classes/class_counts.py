@@ -18,9 +18,9 @@ def count_cia_classes(file_paths):
 
 # Example usage
 file_paths = [
-    "/workspace/Cyber-sec-v1/Data/CSV Files/CVSS_without_tf.csv",
-    "/workspace/Cyber-sec-v1/Data/CSV Files/CVSS_with_tf.csv",
-    "/workspace/Cyber-sec-v1/Data/CSV Files/cve_data.csv/CVSS_data_pre-trained.csv"
+    "/home/lee/Documents/GitHub/Cyber-sec-v1/Data/CSV Files/updated_cve_data_!t.csv"
+    "/home/lee/Documents/GitHub/Cyber-sec-v1/Data/CSV Files/updated_cve_data_with_tf.csv",
+    "/home/lee/Documents/GitHub/Cyber-sec-v1/Data/CSV Files/updated_cve_data_pre_classify_then_train.csv",
 ]
 
 class_counts = count_cia_classes(file_paths)

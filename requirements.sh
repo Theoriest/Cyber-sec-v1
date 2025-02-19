@@ -1,43 +1,59 @@
 #!/bin/bash
 
-# Update package lists
-sudo apt-get update
+set -e  # Exit immediately if a command exits with a non-zero status
 
-# Install pip
-sudo apt-get install -y python3-pip
+echo "Updating package lists..."
+sudo apt-get update -y
 
-# Install virtualenv
-pip3 install virtualenv
+echo "Installing Python3, pip, and venv..."
+sudo apt-get install -y python3 python3-pip python3-venv build-essential
 
-# Create a virtual environment
-virtualenv venv
+# Create a virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "Creating a virtual environment..."
+    python3 -m venv venv
+fi
 
 # Activate the virtual environment
+echo "Activating the virtual environment..."
 source venv/bin/activate
 
-# Install necessary build tools
-sudo apt-get install -y build-essential
+# Upgrade pip to the latest version
+echo "Upgrading pip..."
+pip install --upgrade pip
 
-# Install Rust (required for building some Python packages)
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-source $HOME/.cargo/env
+# Install Rust (if not already installed)
+if ! command -v cargo &> /dev/null; then
+    echo "Installing Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source $HOME/.cargo/env
+else
+    echo "Rust is already installed, skipping..."
+fi
 
-# Install SentencePiece
-pip install sentencepiece
+# Create a requirements.txt file
+cat <<EOF > requirements.txt
+sentencepiece
+pandas
+scikit-learn
+torch
+tensorflow
+flax
+transformers
+EOF
 
-# Install necessary Python packages with specific versions for compatibility
-pip install pandas scikit-learn torch tensorflow flax transformers
+# Install Python dependencies
+echo "Installing Python packages..."
+pip install -r requirements.txt
 
-# Verify installation
+# Verify installations
 echo "Installed versions:"
-pip show pandas | grep Version
-pip show scikit-learn | grep Version
-pip show torch | grep Version
-pip show tensorflow | grep Version
-pip show flax | grep Version
-pip show transformers | grep Version
+for pkg in sentencepiece pandas scikit-learn torch tensorflow flax transformers; do
+    pip show "$pkg" | grep Version || echo "$pkg not found!"
+done
 
-echo "All required modules have been installed."
+echo "All required modules have been installed successfully."
 
 # Deactivate the virtual environment
 deactivate
+echo "Virtual environment deactivated."

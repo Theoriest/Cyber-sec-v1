@@ -7,11 +7,13 @@ import os
 base_url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 
 # Parameters for pagination
-start_index = 0
 results_per_page = 2000
 
-filtered_data = []
-csv_file_path = "/workspace/Cyber-sec-v1/Data/CSV Files/cve_data.csv"
+# Update the path to a directory within your home directory
+csv_file_path = os.path.expanduser("/home/lee/Documents/GitHub/Cyber-sec-v1/Data/CSV Files/cve_data.csv")
+
+# Ensure the directory exists
+os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
 
 # Function to fetch CVE data and return as a list of dictionaries
 def fetch_cve_data(start_index, results_per_page):
@@ -63,6 +65,15 @@ def fetch_cve_data(start_index, results_per_page):
         time.sleep(60)
         return [], 0
 
+# Determine the starting index based on the existing CSV file
+if os.path.exists(csv_file_path) and os.path.getsize(csv_file_path) > 0:
+    existing_df = pd.read_csv(csv_file_path)
+    start_index = len(existing_df) + 1  # Start from the next record
+else:
+    start_index = 0
+
+filtered_data = []
+
 # Fetch and save CVE data
 while True:
     cve_data, total_results = fetch_cve_data(start_index, results_per_page)
@@ -80,6 +91,10 @@ while True:
 df = pd.DataFrame(filtered_data)
 
 # Save DataFrame to CSV file
-df.to_csv(csv_file_path, mode='w', header=True, index=False)
+if os.path.exists(csv_file_path) and os.path.getsize(csv_file_path) > 0:
+    df.to_csv(csv_file_path, mode='a', header=False, index=False)
+else:
+    df.to_csv(csv_file_path, mode='w', header=True, index=False)
+
 print(f"Data saved to {csv_file_path}")
 print(f"Total records fetched: {len(df)}")
