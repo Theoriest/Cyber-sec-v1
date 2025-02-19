@@ -17,7 +17,35 @@ df = pd.read_csv("/home/lee/Documents/GitHub/Cyber-sec-v1/Data/CSV Files/cleaned
 df.ffill(inplace=True)
 
 # Create a labeled dataset (example labels, you need to provide actual labels)
-df['CIA_Class'] = df['Description'].apply(lambda x: 'Confidentiality' if 'confidentiality' in x.lower() else ('Integrity' if 'integrity' in x.lower() else ('Availability' if 'availability' in x.lower() else 'Other')))
+df['CIA_Class'] = df['Description'].apply(lambda x: 'Confidentiality' if ["confidentiality", "disclosure", "leak", "exposure","Data Breach",
+    "Eavesdropping (Sniffing)",
+    "Man-in-the-Middle (MitM)",
+    "Phishing",
+    "SQL Injection",
+    "Brute Force",
+    "Credential Stuffing",
+    "Insider Threat",
+    "Shoulder Surfing",
+    "Malware (Spyware/Keyloggers)"] in x.lower() else ('Integrity' if ["integrity", "tampering", "modification", "alteration",
+    "Data Manipulation",
+    "Man-in-the-Middle (MitM) Data Injection",
+    "Fileless Malware",
+    "Rogue DNS ",
+    "Session Hijacking",
+    "Hash Collision",
+    "Ransomware",
+    "Time-of-Check to Time-of-Use (TOCTOU)",
+    "Log Tampering",
+    "Malicious Firmware/BIOS"] in x.lower() else ('Availability' if ["availability", "denial of service", "downtime", "interruption","Denial of Service (DoS)",
+    "Distributed Denial of Service (DDoS)",
+    "Botnet",
+    "Ransomware",
+    "DNS Poisoning",
+    "Zero-Day Exploits",
+    "Resource Exhaustion",
+    "Cloud Resource Hijacking",
+    "Physical",
+    "Firmware"] in x.lower() else 'Other')))
 
 # Encode labels
 label_map = {'Confidentiality': 0, 'Integrity': 1, 'Availability': 2, 'Other': 3}

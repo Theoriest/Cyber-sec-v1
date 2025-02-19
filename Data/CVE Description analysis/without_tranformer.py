@@ -15,11 +15,40 @@ df.ffill(inplace=True)
 
 # Classify vulnerabilities according to the CIA triad
 def classify_cia(description):
-    if 'confidentiality' in description.lower():
+    description = description.lower()
+    if any(word in description for word in ["confidentiality", "disclosure", "leak", "exposure","Data Breach",
+    "Eavesdropping (Sniffing)",
+    "Man-in-the-Middle (MitM)",
+    "Phishing",
+    "SQL Injection",
+    "Brute Force",
+    "Credential Stuffing",
+    "Insider Threat",
+    "Shoulder Surfing",
+    "Malware (Spyware/Keyloggers)"]):
         return 'Confidentiality'
-    elif 'integrity' in description.lower():
+    elif any(word in description for word in ["integrity", "tampering", "modification", "alteration",
+    "Data Manipulation",
+    "Man-in-the-Middle (MitM) Data Injection",
+    "Fileless Malware",
+    "Rogue DNS ",
+    "Session Hijacking",
+    "Hash Collision",
+    "Ransomware",
+    "Time-of-Check to Time-of-Use (TOCTOU)",
+    "Log Tampering",
+    "Malicious Firmware/BIOS"]):
         return 'Integrity'
-    elif 'availability' in description.lower():
+    elif any(word in description for word in ["availability", "denial of service", "downtime", "interruption","Denial of Service (DoS)",
+    "Distributed Denial of Service (DDoS)",
+    "Botnet",
+    "Ransomware",
+    "DNS Poisoning",
+    "Zero-Day Exploits",
+    "Resource Exhaustion",
+    "Cloud Resource Hijacking",
+    "Physical",
+    "Firmware"]):
         return 'Availability'
     else:
         return 'Other'
@@ -39,7 +68,7 @@ X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=
 
 # Textual feature extraction
 text_transformer = Pipeline(steps=[
-    ('tfidf', TfidfVectorizer(max_features=1000))
+    ('tfidf', TfidfVectorizer(max_features=5000))
 ])
 
 # Categorical feature encoding
@@ -76,7 +105,7 @@ missing_cvss['CVSS_Score'] = predicted_cvss
 df = pd.concat([available_cvss, missing_cvss])
 
 # save the updated data to a new CSV file
-save_path = "/home/lee/Documents/GitHub/Cyber-sec-v1/Data/CSV Files/updated_cve_data_!t.csv"
+save_path = "/home/lee/Documents/GitHub/Cyber-sec-v1/Data/CSV Files/updated_cve_data_wot.csv"
 df.to_csv(save_path, index=False)
 print(f"Updated data saved to {save_path}")
 

@@ -50,7 +50,7 @@ X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=
 
 # Textual feature extraction
 text_transformer = Pipeline(steps=[
-    ('tfidf', TfidfVectorizer(max_features=1000))
+    ('tfidf', TfidfVectorizer(max_features=5000))
 ])
 
 # Categorical feature encoding
